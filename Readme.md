@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
-* Студент: [Татьяна Комарова](https://up.htmlacademy.ru/ecmascript/15/user/1674535).
-* Наставник: `Неизвестно`.
+- Студент: [Татьяна Комарова](https://up.htmlacademy.ru/ecmascript/15/user/1674535).
+- Наставник: [Дмитрий Рябинин](https://up.htmlacademy.ru/ecmascript/15/user/63289).
 
 ---
 
