@@ -6,6 +6,8 @@ import {createContentTemplate} from './view/content.js';
 import {createEditTemplate} from './view/edit.js';
 import {createPointTemplate} from './view/point.js';
 
+const POINT_COUNT = 3;
+
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -22,7 +24,7 @@ render(siteEventsElement, createContentTemplate(), 'beforeend');
 
 const siteContentElement = document.querySelector('.trip-events__list');
 render(siteContentElement, createEditTemplate(), 'beforeend');
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < POINT_COUNT; i++) {
   render(siteContentElement, createPointTemplate(), 'beforeend');
 }
 
