@@ -1,4 +1,4 @@
-import {getRandomInteger, getMixedRandomLenghtArray, getRandomBoolean} from '../helpers/random_helper.js';
+import {getRandomInteger, getMixedRandomLenghtArray, getRandomBoolean} from '../helpers/random-helper.js';
 import {POINT_TYPES, CITY_NAMES, OFFER_TITLES} from '../const.js';
 import dayjs from 'dayjs';
 const MAX_DESСRIPTION_PHRASE_COUNT = 5;

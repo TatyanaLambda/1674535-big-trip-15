@@ -1,7 +1,7 @@
+import {getShortDate} from '../helpers/date-helper.js';
+
 const getBaseCost = (elements) => elements.reduce((acc, curr) => acc + curr.basePrice, 0);
 const getAddCost = (elements) => elements.reduce((acc, curr) => acc + curr.addPrice, 0);
-
-import {getDateForInfo} from '../helpers/date_helper.js';
 
 const getTotalCost  = (points) => {
   const baseCost = getBaseCost(points);
@@ -18,8 +18,8 @@ const getPeriod = (points) => {
   const dateFromArray = points.map((item) => item.dateFrom);
   const dateToArray = points.map((item) => item.dateTo);
   return {
-    maximumDate: getDateForInfo(new Date(Math.max.apply(null, dateToArray))),
-    minimumDate: getDateForInfo(new Date(Math.min.apply(null, dateFromArray))),
+    maximumDate: getShortDate(new Date(Math.max.apply(null, dateToArray))),
+    minimumDate: getShortDate(new Date(Math.min.apply(null, dateFromArray))),
   };
 };
 

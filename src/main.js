@@ -2,12 +2,11 @@ import {createSiteMenuTemplate} from './view/menu.js';
 import {createInfoTemplate} from './view/info.js';
 import {createFilterTemplate} from './view/filter.js';
 import {createSortTemplate} from './view/sort.js';
-import {createEventListTemplate} from './view/event_list.js';
+import {createEventListTemplate} from './view/event-list.js';
 import {createEditTemplate} from './view/edit.js';
 import {createPointTemplate} from './view/point.js';
 import {generatePoint} from './mock/point.js';
-import {createEmptyListTemplate} from './view/empty_list.js';
-import {generateFilter} from './mock/filter.js';
+import {createEmptyListTemplate} from './view/empty-list.js';
 import {getTotalInfoaboutTrip} from './mock/total.js';
 
 const POINT_COUNT = 4;
@@ -22,10 +21,9 @@ const siteMainElement = document.querySelector('.trip-main');
 const siteHeaderElement = siteMainElement.querySelector('.trip-controls__navigation');
 const siteFilterElement = siteMainElement.querySelector('.trip-controls__filters');
 const siteEventsElement = document.querySelector('.trip-events');
-const filters = generateFilter(points);
 const info = getTotalInfoaboutTrip(points);
 render(siteHeaderElement, createSiteMenuTemplate());
-render(siteFilterElement, createFilterTemplate(filters));
+render(siteFilterElement, createFilterTemplate());
 if (points.length===0){
   render(siteEventsElement, createEmptyListTemplate());
 }

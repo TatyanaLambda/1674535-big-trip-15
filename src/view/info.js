@@ -1,5 +1,3 @@
-
-
 export const createInfoTemplate = (info) => {
   const {path, period, cost} = info;
   const pathItemsTemplate = (elements) => (

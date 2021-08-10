@@ -46,4 +46,10 @@ const SORT_FIELDS = [
   'offer',
 ];
 
-export {POINT_TYPES, CITY_NAMES, OFFER_TITLES, OFFER_TITLES_LABEL, SORT_FIELDS};
+const FILTER_NAME = [
+  'everything',
+  'future',
+  'past',
+];
+
+export {POINT_TYPES, CITY_NAMES, OFFER_TITLES, OFFER_TITLES_LABEL, SORT_FIELDS, FILTER_NAME};

@@ -1,6 +1,65 @@
 import dayjs from 'dayjs';
 import {POINT_TYPES, CITY_NAMES, OFFER_TITLES_LABEL} from '../const.js';
-import {getDateForEditForm} from '../helpers/date_helper.js';
+import {getDateForEditForm} from '../helpers/date-helper.js';
+
+const createTypesTemplate = (type) => (
+  POINT_TYPES.map((element) =>
+    `
+    <div class="event__type-item">
+      <input id="event-type-${element}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element}" ${element===type?'ckecked':''}>
+      <label class="event__type-label  event__type-label--${element}" for="event-type-${element}-1">${element}</label>
+    </div>
+    `).join('')
+);
+
+
+const createDestinationListTemplate = () => (
+  CITY_NAMES.map((cityName) =>`<option value="${cityName}"></option>`).join('')
+);
+const destinationListTemplate = createDestinationListTemplate();
+
+
+const createOfferTemplate = (offer) => (`
+  <div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${OFFER_TITLES_LABEL[offer.title]}-1" type="checkbox" name="event-offer-${OFFER_TITLES_LABEL[offer.title]}" ckecked}>
+    <label class="event__offer-label" for="event-offer-${OFFER_TITLES_LABEL[offer.title]}-1">
+      <span class="event__offer-title">${offer.title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${offer.addPrice}</span>
+    </label>
+  </div>
+`);
+
+const createOffersTemplate = (offers) => (`
+  ${offers.length !== 0 ?`
+    <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+      <div class="event__available-offers">
+    ${offers.map((offer) => createOfferTemplate(offer)).join('')}
+      </div>
+      </section>
+  `:''}
+`);
+
+const createPictureTemplate = (photo) => (
+  `<img class="event__photo" src="${photo.src}" alt="Event photo"></img>`
+);
+
+const createDestinationTemplate = (destination) => (`
+  ${destination.name !== '' ?`
+    <section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${destination.description}</p>
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+      ${destination.pictures.map((photo) => createPictureTemplate(photo)).join('')}
+      </div>
+    </div>
+    </section>
+  `:''}
+`);
+
 export const createEditTemplate = (point={}) => {
   const {
     destination = {
@@ -15,75 +74,9 @@ export const createEditTemplate = (point={}) => {
     offers = [],
   } = point;
 
-  const createDateTemplate = () => (`
-    <div class="event__field-group  event__field-group--time">
-      <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getDateForEditForm(dateFrom)}">
-      &mdash;
-      <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getDateForEditForm(dateTo)}">
-    </div>
-    `
-  );
-  const dateTemplate = createDateTemplate();
-
-
-  const createTypesTemplate = () => (
-    POINT_TYPES.map((element) =>
-      `
-      <div class="event__type-item">
-        <input id="event-type-${element}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element}" ${element===type?'ckecked':''}>
-        <label class="event__type-label  event__type-label--${element}" for="event-type-${element}-1">${element}</label>
-      </div>
-      `).join('')
-  );
-  const typesTemplate = createTypesTemplate();
-  const createDestinationListTemplate = () => (
-    CITY_NAMES.map((cityName) =>
-      `
-      <option value="${cityName}"></option>
-      `).join('')
-  );
-  const destinationListTemplate = createDestinationListTemplate();
-  const createOffersTemplate = () => (`
-    ${offers.length !== 0 ?`
-    <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-        <div class="event__available-offers">
-    ${offers.map((offer) =>
-      `
-      <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${OFFER_TITLES_LABEL[offer.title]}-1" type="checkbox" name="event-offer-${OFFER_TITLES_LABEL[offer.title]}" ckecked}>
-        <label class="event__offer-label" for="event-offer-${OFFER_TITLES_LABEL[offer.title]}-1">
-          <span class="event__offer-title">${offer.title}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${offer.addPrice}</span>
-        </label>
-      </div>
-      `).join('')}
-      </div>
-      </section>
-  `:''}
-  `);
-  const offersTemplate = createOffersTemplate();
-
-  const createDestinationTemplate = () => (`
-    ${destination.name !== '' ?`
-    <section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description}</p>
-    <div class="event__photos-container">
-      <div class="event__photos-tape">
-      ${destination.pictures.map((photo) =>`
-        <img class="event__photo" src="${photo.src}" alt="Event photo"></img>
-        `).join('')}
-      </div>
-    </div>
-    </section>
-  `:''}
-  `);
-  const destinationTemplate = createDestinationTemplate();
+  const typesTemplate = createTypesTemplate(type);
+  const offersTemplate = createOffersTemplate(offers);
+  const destinationTemplate = createDestinationTemplate(destination);
 
   return `
   <li class="trip-events__item">
@@ -114,7 +107,13 @@ export const createEditTemplate = (point={}) => {
         </datalist>
       </div>
 
-      ${dateTemplate}
+      <div class="event__field-group  event__field-group--time">
+        <label class="visually-hidden" for="event-start-time-1">From</label>
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getDateForEditForm(dateFrom)}">
+        &mdash;
+        <label class="visually-hidden" for="event-end-time-1">To</label>
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getDateForEditForm(dateTo)}">
+      </div>
 
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">

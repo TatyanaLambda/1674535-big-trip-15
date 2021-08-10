@@ -1,4 +1,4 @@
-import {getDateWithTime, getTimeFromDate, getShortDate, getLongDate, getDateDifference} from '../helpers/date_helper.js';
+import {getDateWithTime, getTimeFromDate, getShortDate, getLongDate, getDateDifference} from '../helpers/date-helper.js';
 
 export const createPointTemplate = (point) => {
   const {destination, type, dateFrom, dateTo, basePrice, offers, isFavorite} = point;
@@ -22,7 +22,7 @@ export const createPointTemplate = (point) => {
   );
 
   const offersTemplate = createOfferTemplate(offers);
-  const favoriteClassName = isFavorite?'event__favorite-btn event__favorite-btn--active':'event__favorite-btn';
+  const favoriteClassName = isFavorite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
   return `
   <li class="trip-events__item">
     <div class="event">
