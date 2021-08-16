@@ -1,6 +1,20 @@
 import dayjs from 'dayjs';
 import {POINT_TYPES, CITY_NAMES, OFFER_TITLES_LABEL} from '../const.js';
 import {getDateForEditForm} from '../helpers/date-helper.js';
+import {createElement} from '../helpers/utils.js';
+
+const BLANK_POINT = {
+  destination: {
+    name: '',
+    description: '',
+    pictures: [],
+  },
+  type: 'bus',
+  dateFrom: dayjs(),
+  dateTo: dayjs(),
+  basePrice: null,
+  offers: [],
+};
 
 const createTypesTemplate = (type) => (
   POINT_TYPES.map((element) =>
@@ -60,20 +74,8 @@ const createDestinationTemplate = (destination) => (`
   `:''}
 `);
 
-export const createEditTemplate = (point={}) => {
-  const {
-    destination = {
-      name: '',
-      description: '',
-      pictures: [],
-    },
-    type = 'bus',
-    dateFrom = dayjs(),
-    dateTo = dayjs(),
-    basePrice = null,
-    offers = [],
-  } = point;
-
+const createEditTemplate = (point) => {
+  const {destination, type, dateFrom, dateTo, basePrice, offers} = point;
   const typesTemplate = createTypesTemplate(type);
   const offersTemplate = createOffersTemplate(offers);
   const destinationTemplate = createDestinationTemplate(destination);
@@ -133,3 +135,26 @@ export const createEditTemplate = (point={}) => {
   </form>
   </li>
 `;};
+
+export default class Sort {
+  constructor(point = BLANK_POINT) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

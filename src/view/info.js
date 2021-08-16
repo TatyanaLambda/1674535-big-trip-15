@@ -1,4 +1,5 @@
-export const createInfoTemplate = (info) => {
+import {createElement} from '../helpers/utils.js';
+const createInfoTemplate = (info) => {
   const {path, period, cost} = info;
   const pathItemsTemplate = (elements) => (
     elements.map((element) =>
@@ -20,3 +21,26 @@ export const createInfoTemplate = (info) => {
       </p>
     </section>
 `;};
+
+export default class Sort {
+  constructor(info) {
+    this._info = info;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createInfoTemplate(this._info);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

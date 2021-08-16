@@ -1,4 +1,4 @@
-import {SORT_FIELDS} from '../const.js';
+import {createElement} from '../helpers/utils.js';
 
 const createSortItemTemplate = (field, isChecked) => (
   `
@@ -9,11 +9,34 @@ const createSortItemTemplate = (field, isChecked) => (
   `
 );
 
-export const createSortTemplate = () => {
-  const sortTemplate = SORT_FIELDS.map((field, index) =>createSortItemTemplate(field, index === 0)).join('');
+const createSortTemplate = (fieldItems) => {
+  const sortTemplate = fieldItems.map((field, index) =>createSortItemTemplate(field, index === 0)).join('');
 
   return`
   <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     ${sortTemplate}
   </form>
 `;};
+
+export default class Sort {
+  constructor(fields) {
+    this._fields = fields;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortTemplate(this._fields);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
