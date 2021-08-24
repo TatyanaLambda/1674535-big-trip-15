@@ -136,7 +136,7 @@ const createEditTemplate = (point) => {
   </li>
 `;};
 
-export default class Sort {
+export default class Edit {
   constructor(point = BLANK_POINT) {
     this._point = point;
     this._element = null;

@@ -6,7 +6,7 @@ const createMenuTemplate = () => `
     <a class="trip-tabs__btn" href="#">Stats</a>
   </nav>
 `;
-export default class SiteMenu {
+export default class Menu {
   constructor() {
     this._element = null;
   }
