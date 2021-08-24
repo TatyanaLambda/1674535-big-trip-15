@@ -60,7 +60,7 @@ const createPointTemplate = (point) => {
     </li>
 `;};
 
-export default class Sort {
+export default class Point {
   constructor(point) {
     this._point = point;
     this._element = null;

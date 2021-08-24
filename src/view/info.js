@@ -22,7 +22,7 @@ const createInfoTemplate = (info) => {
     </section>
 `;};
 
-export default class Sort {
+export default class Info {
   constructor(info) {
     this._info = info;
     this._element = null;

@@ -13,7 +13,7 @@ import SortView from './view/sort.js';
 import EventListView from './view/event-list.js';
 import EditView from './view/edit.js';
 import PointView from './view/point.js';
-import EmptyListView from './view/empty-list.js';
+import EmptyMessageView from './view/empty-message.js';
 import TripEventsView from './view/trip-events.js';
 
 
@@ -63,7 +63,7 @@ render(siteHeaderElement, new MenuView().getElement());
 render(siteFilterElement, new FilterView(FILTER_NAME).getElement());
 const tripEventsComponent = new TripEventsView();
 if (points.every((point) => point.isArchive)){
-  render(tripEventsComponent.getElement(), new EmptyListView().getElement());
+  render(tripEventsComponent.getElement(), new EmptyMessageView().getElement());
 }
 else{
   render(siteMainElement, new InfoView(info).getElement(), RenderPosition.AFTERBEGIN);
