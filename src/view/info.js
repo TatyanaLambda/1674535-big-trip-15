@@ -1,4 +1,5 @@
-import {createElement} from '../helpers/utils.js';
+import AbstractView from './abstract.js';
+
 const createInfoTemplate = (info) => {
   const {path, period, cost} = info;
   const pathItemsTemplate = (elements) => (
@@ -22,25 +23,13 @@ const createInfoTemplate = (info) => {
     </section>
 `;};
 
-export default class Info {
+export default class Info extends AbstractView {
   constructor(info) {
+    super();
     this._info = info;
-    this._element = null;
   }
 
   getTemplate() {
     return createInfoTemplate(this._info);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

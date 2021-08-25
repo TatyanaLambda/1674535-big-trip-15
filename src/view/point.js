@@ -1,5 +1,5 @@
-import {getDateWithTime, getTimeFromDate, getShortDate, getLongDate, getDateDifference} from '../helpers/date-helper.js';
-import {createElement} from '../helpers/utils.js';
+import {getDateWithTime, getTimeFromDate, getShortDate, getLongDate, getDateDifference} from '../utils/date.js';
+import AbstractView from './abstract.js';
 
 const createPointTemplate = (point) => {
   const {destination, type, dateFrom, dateTo, basePrice, offers, isFavorite} = point;
@@ -60,25 +60,24 @@ const createPointTemplate = (point) => {
     </li>
 `;};
 
-export default class Point {
+export default class Point extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }
