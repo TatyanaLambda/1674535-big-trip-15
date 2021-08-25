@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {POINT_TYPES, CITY_NAMES, OFFER_TITLES_LABEL} from '../const.js';
-import {getDateForEditForm} from '../helpers/date-helper.js';
-import {createElement} from '../helpers/utils.js';
+import {getDateForEditForm} from '../utils/date.js';
+import AbstractView from './abstract.js';
 
 const BLANK_POINT = {
   destination: {
@@ -136,25 +136,24 @@ const createEditTemplate = (point) => {
   </li>
 `;};
 
-export default class Edit {
+export default class Edit extends AbstractView {
   constructor(point = BLANK_POINT) {
+    super();
     this._point = point;
-    this._element = null;
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
     return createEditTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 }

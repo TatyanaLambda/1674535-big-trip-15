@@ -1,4 +1,4 @@
-import {getShortDate} from '../helpers/date-helper.js';
+import {getShortDate} from '../utils/date.js';
 
 const getBaseCost = (elements) => elements.reduce((acc, curr) => acc + curr.basePrice, 0);
 const getAddCost = (elements) => elements.reduce((acc, curr) => acc + curr.addPrice, 0);

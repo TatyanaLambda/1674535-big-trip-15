@@ -1,4 +1,4 @@
-import {render, RenderPosition} from './helpers/utils.js';
+import {render, RenderPosition, replace} from './utils/render.js';
 
 import {SORT_FIELDS} from './const.js';
 import {FILTER_NAME} from './const.js';
@@ -31,11 +31,11 @@ const renderPoint = (pointListElement, point) => {
   const pointComponent = new PointView(point);
   const editComponent = new EditView(point);
   const replacePointToEditForm = () => {
-    pointListElement.replaceChild(editComponent.getElement(), pointComponent.getElement());
+    replace(editComponent, pointComponent);
   };
 
   const replaceEditFormToPoint = () => {
-    pointListElement.replaceChild(pointComponent.getElement(), editComponent.getElement());
+    replace(pointComponent, editComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -46,34 +46,34 @@ const renderPoint = (pointListElement, point) => {
     }
   };
 
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.setEditClickHandler(() => {
     replacePointToEditForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  editComponent.setFormSubmitHandler(() => {
     replaceEditFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
-  render(pointListElement, pointComponent.getElement());
+
+  render(pointListElement, pointComponent);
 };
 
-render(siteHeaderElement, new MenuView().getElement());
-render(siteFilterElement, new FilterView(FILTER_NAME).getElement());
+render(siteHeaderElement, new MenuView());
+render(siteFilterElement, new FilterView(FILTER_NAME));
 const tripEventsComponent = new TripEventsView();
-if (points.every((point) => point.isArchive)){
-  render(tripEventsComponent.getElement(), new EmptyMessageView().getElement());
+if (points.length===0){
+  render(tripEventsComponent, new EmptyMessageView());
 }
 else{
-  render(siteMainElement, new InfoView(info).getElement(), RenderPosition.AFTERBEGIN);
-  render(bodyConteinerElement, tripEventsComponent.getElement());
-  render(tripEventsComponent.getElement(), new SortView(SORT_FIELDS).getElement());
+  render(siteMainElement, new InfoView(info), RenderPosition.AFTERBEGIN);
+  render(bodyConteinerElement, tripEventsComponent);
+  render(tripEventsComponent, new SortView(SORT_FIELDS));
   const eventListComponent = new EventListView();
-  render(tripEventsComponent.getElement(), eventListComponent.getElement());
+  render(tripEventsComponent, eventListComponent);
 
   for (let i = 1; i < POINT_COUNT; i++) {
-    renderPoint(eventListComponent.getElement(), points[i]);
+    renderPoint(eventListComponent, points[i]);
   }
 }
 
