@@ -6,6 +6,7 @@ import TripEventsView from '../view/trip-events.js';
 import {render, RenderPosition} from '../utils/render.js';
 import {SORT_FIELDS} from '../const.js';
 import PointPresenter from './point.js';
+import {updateItem} from '../utils/common.js';
 const POINT_COUNT = 4;
 
 export default class Trip {
@@ -17,6 +18,9 @@ export default class Trip {
     this._eventListComponent = new EventListView();
     this._emptyMessageComponent = new EmptyMessageView();
     this._tripEventsComponent = new TripEventsView();
+    this._pointPresenter = new Map();
+    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init(tripPoints) {
@@ -37,14 +41,20 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._eventListComponent);
+    const pointPresenter = new PointPresenter(this._eventListComponent, this._handlePointChange, this._handleModeChange);
     pointPresenter.init(point);
+    this._pointPresenter.set(point.id, pointPresenter);
   }
 
   _renderPoints(from, to) {
     this._tripPoints
       .slice(from, to)
       .forEach((tripPoint) => this._renderPoint(tripPoint));
+  }
+
+  _clearPointList() {
+    this._pointPresenter.forEach((presenter) => presenter.destroy());
+    this._pointPresenter.clear();
   }
 
   _renderPointList() {
@@ -70,5 +80,14 @@ export default class Trip {
       this._renderEventList();
       this._renderPoints(points);
     }
+  }
+
+  _handlePointChange(updatedPoint) {
+    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  }
+
+  _handleModeChange() {
+    this._pointPresenter.forEach((presenter) => presenter.resetView());
   }
 }

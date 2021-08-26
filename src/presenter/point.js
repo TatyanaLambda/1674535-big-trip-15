@@ -8,14 +8,17 @@ const Mode = {
 };
 
 export default class Point {
-  constructor(eventListContainer) {
+  constructor(eventListContainer, changeData, changeMode) {
     this._eventListContainer = eventListContainer;
+    this._changeData = changeData;
+    this._changeMode = changeMode;
     this._pointComponent = null;
     this._editComponent = null;
     this._mode = Mode.DEFAULT;
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleEscKeyDown = this._handleEscKeyDown.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
   init(point) {
@@ -26,6 +29,7 @@ export default class Point {
     this._editComponent = new EditView(point);
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._editComponent .setFormSubmitHandler(this._handleFormSubmit);
+    this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     if (prevPointComponent === null || prevEditComponent === null) {
       render(this._eventListContainer, this._pointComponent);
       return;
@@ -40,13 +44,21 @@ export default class Point {
   }
 
   destroy() {
-    remove(this._taskComponent);
-    remove(this._taskEditComponent);
+    remove(this._pointComponent);
+    remove(this._editComponent);
+  }
+
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditFormToPoint();
+    }
   }
 
   _replacePointToEditForm() {
     replace(this._editComponent, this._pointComponent);
     document.addEventListener('keydown', this._handleEscKeyDown);
+    this._changeMode();
+    this._mode = Mode.EDITING;
   }
 
   _handleEditClick() {
@@ -56,11 +68,13 @@ export default class Point {
   _replaceEditFormToPoint() {
     replace(this._pointComponent, this._editComponent);
     document.removeEventListener('keydown', this._handleEscKeyDown);
-    this._mode = Mode.EDITING;
+    this._mode = Mode.DEFAULT;
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(point) {
+    this._changeData(point);
     this._replaceEditFormToPoint();
+
   }
 
   _handleEscKeyDown(evt) {
@@ -68,5 +82,17 @@ export default class Point {
       evt.preventDefault();
       this._replaceEditFormToPoint();
     }
+  }
+
+  _handleFavoriteClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._point,
+        {
+          isFavorite: !this._point.isFavorite,
+        },
+      ),
+    );
   }
 }

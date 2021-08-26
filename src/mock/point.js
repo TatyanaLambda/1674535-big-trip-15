@@ -1,6 +1,7 @@
 import {getRandomInteger, getMixedRandomLenghtArray, getRandomBoolean} from '../utils/random.js';
 import {POINT_TYPES, CITY_NAMES, OFFER_TITLES} from '../const.js';
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 
 const MAX_DESСRIPTION_PHRASE_COUNT = 5;
 const MIN_PHOTO_COUNT = 1;
@@ -98,7 +99,7 @@ export const generatePoint = () => {
   }
 
   return {
-    id: 0,
+    id: nanoid(),
     basePrice: generatePrice(),
     type: generatePointType(),
     destination: generateDestination(),
