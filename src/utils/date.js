@@ -23,6 +23,3 @@ export const getDateDifference = (dateFrom, dateTo) => {
 };
 
 export const isPastEvent = (dueDate) => dayjs(dueDate).isBefore(dayjs(), 'D');
-
-export const sortPointUp = (pointA, pointB) => dayjs(pointA.dueDate).diff(dayjs(pointB.dueDate));
-

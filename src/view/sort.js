@@ -11,7 +11,8 @@ const createSortItemTemplate = (field, isChecked) => (
 );
 
 const createSortTemplate = (currentSortType) => {
-  const sortTemplate = SORT_FIELDS.map((field) =>createSortItemTemplate(field, field === currentSortType)).join('');
+
+  const sortTemplate = Object.values(SORT_FIELDS).map((field) =>createSortItemTemplate(field, field === currentSortType)).join('');
 
   return`
   <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -34,7 +35,6 @@ export default class Sort extends AbstractView {
     if (evt.target.tagName !== 'LABEL') {
       return;
     }
-    evt.preventDefault();
     this._callback.sortTypeChange(evt.target.getAttribute('for'));
   }
 

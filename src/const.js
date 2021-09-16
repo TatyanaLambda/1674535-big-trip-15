@@ -38,11 +38,11 @@ const OFFER_TITLES_LABEL = {
   'Travel by train': 'train',
 };
 
-const SORT_FIELDS = [
-  'day',
-  'time',
-  'price',
-];
+const SORT_FIELDS = {
+  'DEFAULT':'day',
+  'TIME':'time',
+  'COST':'cost',
+};
 
 const FILTER_NAME = [
   'everything',
