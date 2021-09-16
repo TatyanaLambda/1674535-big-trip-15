@@ -40,10 +40,8 @@ const OFFER_TITLES_LABEL = {
 
 const SORT_FIELDS = [
   'day',
-  'event',
   'time',
   'price',
-  'offer',
 ];
 
 const FILTER_NAME = [
