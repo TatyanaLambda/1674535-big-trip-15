@@ -38,13 +38,13 @@ const OFFER_TITLES_LABEL = {
   'Travel by train': 'train',
 };
 
-const SORT_FIELDS = [
-  'day',
-  'event',
-  'time',
-  'price',
-  'offer',
-];
+const SORT_FIELDS = {
+  'DEFAULT':'day',
+  'EVENT':'event',
+  'TIME':'time',
+  'PRICE':'price',
+  'OFFER': 'offer',
+};
 
 const FILTER_NAME = [
   'everything',
