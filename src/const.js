@@ -40,8 +40,10 @@ const OFFER_TITLES_LABEL = {
 
 const SORT_FIELDS = {
   'DEFAULT':'day',
+  'EVENT':'event',
   'TIME':'time',
-  'COST':'cost',
+  'PRICE':'price',
+  'OFFER': 'offer',
 };
 
 const FILTER_NAME = [

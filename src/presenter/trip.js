@@ -6,7 +6,7 @@ import TripEventsView from '../view/trip-events.js';
 import {render, RenderPosition} from '../utils/render.js';
 import PointPresenter from './point.js';
 import {updateItem} from '../utils/common.js';
-import {sortDateUp, sortTimeUp, sortCostUp} from '../utils/sort.js';
+import {sortDate, sortTime, sortPrice} from '../utils/sort.js';
 import {SORT_FIELDS} from '../const.js';
 
 
@@ -91,13 +91,13 @@ export default class Trip {
   _sortPoints(sortType) {
     switch (sortType) {
       case SORT_FIELDS.DEFAULT:
-        this._sortedTripPoints.sort(sortDateUp);
+        this._sortedTripPoints.sort(sortDate);
         break;
       case SORT_FIELDS.TIME:
-        this._sortedTripPoints.sort(sortTimeUp);
+        this._sortedTripPoints.sort(sortTime);
         break;
-      case SORT_FIELDS.COST:
-        this._sortedTripPoints.sort(sortCostUp);
+      case SORT_FIELDS.PRICE:
+        this._sortedTripPoints.sort(sortPrice);
         break;
       default:
         this._tripPoints  = this._sortedTripPoints.slice();

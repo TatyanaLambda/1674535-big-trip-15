@@ -4,8 +4,8 @@ import {SORT_FIELDS} from '../const.js';
 const createSortItemTemplate = (field, isChecked) => (
   `
   <div class="trip-sort__item  trip-sort__item--${field}">
-    <input id="sort-${field}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${field}" ${isChecked ? 'checked' : ''}>
-    <label class="trip-sort__btn" for="${field}">${field}</label>
+    <input id="sort-${field}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="${field}" ${isChecked ? 'checked' : ''} ${field==='event' || field==='offer' ?'disabled':''}>
+    <label class="trip-sort__btn" for="sort-${field}">${field}</label>
   </div>
   `
 );
@@ -32,14 +32,11 @@ export default class Sort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    if (evt.target.tagName !== 'LABEL') {
-      return;
-    }
-    this._callback.sortTypeChange(evt.target.getAttribute('for'));
+    this._callback.sortTypeChange(evt.target.value);
   }
 
   setSortTypeChangeHandler(callback) {
     this._callback.sortTypeChange = callback;
-    this.getElement().addEventListener('click', this._sortTypeChangeHandler);
+    this.getElement().addEventListener('change', this._sortTypeChangeHandler);
   }
 }
