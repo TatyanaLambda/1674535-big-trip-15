@@ -39,7 +39,7 @@ export default class Point {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._EditComponent, prevEditComponent);
+      replace(this._editComponent, prevEditComponent);
     }
   }
 

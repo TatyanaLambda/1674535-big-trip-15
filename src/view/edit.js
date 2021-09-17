@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
 import {POINT_TYPES, CITY_NAMES, OFFER_TITLES_LABEL} from '../const.js';
 import {getDateForEditForm} from '../utils/date.js';
-import AbstractView from './abstract.js';
+import SmartView from './abstract.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const BLANK_POINT = {
   destination: {
@@ -44,8 +46,8 @@ const createOfferTemplate = (offer) => (`
   </div>
 `);
 
-const createOffersTemplate = (offers) => (`
-  ${offers.length !== 0 ?`
+const createOffersTemplate = (offers, isOffers) => (`
+  ${isOffers ?`
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -60,8 +62,8 @@ const createPictureTemplate = (photo) => (
   `<img class="event__photo" src="${photo.src}" alt="Event photo"></img>`
 );
 
-const createDestinationTemplate = (destination) => (`
-  ${destination.name !== '' ?`
+const createDestinationTemplate = (destination, isDestination) => (`
+  ${isDestination ?`
     <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destination.description}</p>
@@ -74,11 +76,11 @@ const createDestinationTemplate = (destination) => (`
   `:''}
 `);
 
-const createEditTemplate = (point) => {
-  const {destination, type, dateFrom, dateTo, basePrice, offers} = point;
+const createEditTemplate = (data) => {
+  const {destination, type, dateFrom, dateTo, basePrice, offers, isOffers, isDestination} = data;
   const typesTemplate = createTypesTemplate(type);
-  const offersTemplate = createOffersTemplate(offers);
-  const destinationTemplate = createDestinationTemplate(destination);
+  const offersTemplate = createOffersTemplate(offers, isOffers);
+  const destinationTemplate = createDestinationTemplate(destination, isDestination);
 
   return `
   <li class="trip-events__item">
@@ -136,25 +138,102 @@ const createEditTemplate = (point) => {
   </li>
 `;};
 
-export default class Edit extends AbstractView {
+export default class Edit extends SmartView {
   constructor(point = BLANK_POINT) {
     super();
-    this._point = point;
+    this._data = Edit.parsePointToData(point);
+    this._dateFromPicker = null;
+    this._dateToPicker = null;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._dateFromChangeHandler = this._dateFromChangeHandler.bind(this);
+    this._dateToChangeHandler = this._dateToChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createEditTemplate(this._point);
+    return createEditTemplate(this._data);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
-    this._callback.formSubmit(this._point);
+    this._callback.formSubmit(Edit.parseDataToPoint(this._data));
   }
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  _dateFromChangeHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate,
+    });
+  }
+
+  _dateToChangeHandler([userDate]) {
+    this.updateData({
+      dateTo: userDate,
+    });
+  }
+
+  _setDateFromPicker() {
+
+    if (this._dateFromPicker) {
+      this._dateFromPicker.destroy();
+      this._dateFromPicker = null;
+    }
+
+    this._dateFromPicker = flatpickr(
+      this.getElement().querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._data.dateFrom,
+        onChange: this._dateFromChangeHandler,
+      },
+    );
+  }
+
+  _setDateToPicker() {
+
+    if (this._dateToPicker) {
+      this._dateToPicker.destroy();
+      this._dateToPicker = null;
+    }
+
+    this._dateToPicker = flatpickr(
+      this.getElement().querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'j F',
+        defaultDate: this._data.dateTo,
+        onChange: this._dateToChangeHandler,
+      },
+    );
+  }
+
+  static parsePointToData(point) {
+    return Object.assign(
+      {},
+      point,
+      {
+        isOffers: point.offers.length !== 0,
+        isDestination: point.destination.name !== '',
+      },
+    );
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+
+    if (!data.isOffers) {
+      data.offers = [];
+    }
+
+    if (!data.isDestination) {
+      data.destination.name === '';
+    }
+
+    delete data.isOffers;
+    delete data.isDestination;
+
+    return data;
   }
 }
